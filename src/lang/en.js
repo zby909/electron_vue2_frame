@@ -1,0 +1,43 @@
+export default {
+  navbar: {
+    Lang_globalSetting: 'GlobalSetting',
+    Lang_statisticalVariables: 'StatisticalVariables',
+    Lang_statistic: 'Statistic',
+    Lang_master: 'Master',
+    Lang_tflList: 'TFLList',
+  },
+  commonVariables: {
+    Lang_complete: 'Okay',
+    Lang_save: 'Save',
+    Lang_cancel: 'Cancel',
+    Lang_copy: 'Copy',
+    Lang_delete: 'Delete',
+    Lang_edit: 'Edit',
+    Lang_pleaseSelect: 'Please select',
+    Lang_pleaseInput: 'Please input',
+    Lang_add: 'Add',
+  },
+  home: {
+    Lang_appName: 'TFL Data Platform',
+    Lang_createProject: 'Create Project',
+    Lang_openProject: 'Open Project',
+
+    Lang_createNewProject: 'Create new project',
+    Lang_nextStep: 'Next step',
+    Lang_giveUp: 'Give up',
+    Lang_projectInformation: 'Project Information',
+    Lang_libNameSet: 'Libname setting',
+    Lang_name: 'Name',
+    Lang_sasPath: 'SAS folder path',
+    Lang_specPath: 'Description file path',
+    Lang_minOne: 'Keep at least one',
+
+    Lang_workModule: 'Work module',
+    Lang_projectOperation: 'Project operation',
+    Lang_globalSetting: 'Setting',
+    Lang_statisticalVar: 'Variable',
+    Lang_statistic: 'Statistic',
+    Lang_master: 'Master',
+    Lang_copyfb: 'copy',
+  },
+};

@@ -1,0 +1,7 @@
+# Ignore artifacts:
+dist
+node_modules
+/src/styles/font
+old-background.js
+# Ignore all HTML files:
+*.html
