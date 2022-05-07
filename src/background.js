@@ -76,7 +76,7 @@ if (!IS_PROD) {
 
 /* -- 自定义渲染进程和主进程的一些通信函数 -- */
 
-//窗口通信中转 eName自定义事件名称 toBrowserWindowId要发送到的窗口id con发送的数据
+//窗口通信中转 eName自定义事件名称 toBrowserWindowId要发送到的窗口id data发送的数据
 ipcMain.on('windowIpc', (event, eName = '', { toBrowserWindowId, data = {} } = {}) => {
   toBrowserWindowId && BrowserWindow.fromId(toBrowserWindowId).webContents.send(eName, data);
 });
@@ -144,13 +144,14 @@ const createNewWindow = async ({ browserWindowOpt, webPreferences = {}, windowId
   xWindow.on('closed', () => (xWindow = null));
 
   let pagePath;
+  let parentWinId = xWindow.getParentWindow() ? xWindow.getParentWindow().id : null;
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     pagePath = hashRoute ? `${process.env.WEBPACK_DEV_SERVER_URL}${hashRoute}` : `${process.env.WEBPACK_DEV_SERVER_URL}#/`;
-    pagePath += `?windowId=${windowId}&thisBrowserId=${xWindow.id}`;
+    pagePath += `?windowId=${windowId}&port=${4000}&thisBrowserId=${xWindow.id}&parentWinId=${parentWinId}`;
   } else {
     createProtocol('app');
     pagePath = hashRoute ? `app://./index.html${hashRoute.replace('/app:/./', '')}` : `app://./index.html#/`;
-    pagePath += `?windowId=${windowId}&port=${5000}&thisBrowserId=${xWindow.id}`;
+    pagePath += `?windowId=${windowId}&port=${4000}&thisBrowserId=${xWindow.id}&parentWinId=${parentWinId}`;
   }
   await xWindow.loadURL(pagePath); //页面已经加载完成
   console.log('准备打开窗口的路由', pagePath);

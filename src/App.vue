@@ -1,3 +1,10 @@
+<!--
+ * @Description:
+ * @Author: zby
+ * @Date: 2022-05-07 17:13:35
+ * @LastEditors: zby
+ * @Reference:
+-->
 <template>
   <div id="app">
     <router-view />
@@ -6,7 +13,7 @@
 
 <script>
 const { ipcRenderer } = require('electron');
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   components: {},
@@ -14,8 +21,6 @@ export default {
   data() {
     return {
       timer: 0,
-
-      parentWinId: null,
     };
   },
   computed: {
@@ -29,12 +34,11 @@ export default {
       }
     },
   },
-  async created() {
-    const parentWinId = await ipcRenderer.invoke('getParentWindowId', this.$thisBrowserId);
-    this.parentWinId = parentWinId;
-    parentWinId === null ? this.UPDATA_ISMAINWIN(true) : this.UPDATA_ISMAINWIN(false);
+  created() {
+    console.log('app.vue created', this.$parentWinId);
   },
   mounted() {
+    console.log('app.vue mounted');
     let eventType = ['click', 'mousewheel', 'mousemove'];
     eventType.forEach(i => {
       document.addEventListener(i, () => {
@@ -42,12 +46,14 @@ export default {
         this.timer = Date.now();
         this.isMainWin && console.log('父窗口活动');
         if (!this.isMainWin) {
-          ipcRenderer.send('windowIpc', 'childSetThisTime', {
-            toBrowserWindowId: this.parentWinId,
-            con: { childClickTime: Date.now() },
-          });
+          ipcRenderer.send('windowIpc', 'childSetThisTime', { toBrowserWindowId: this.$parentWinId, data: { childClickTime: Date.now() } });
         }
       });
+    });
+
+    //子窗口点击也记录操作时间
+    ipcRenderer.on('childSetThisTime', (event, v) => {
+      console.log('子窗口记录用户活动:', v);
     });
 
     if (this.isMainWin) {
@@ -63,19 +69,12 @@ export default {
           .catch(() => {});
       });
     }
-
-    //子窗口点击也记录操作时间
-    ipcRenderer.on('childSetThisTime', (event, v) => {
-      console.log('子窗口记录用户活动:', v);
-    });
   },
   destroyed() {
     ipcRenderer.removeAllListeners('beforeClose');
     ipcRenderer.removeAllListeners('childSetThisTime');
   },
-  methods: {
-    ...mapMutations('app/', ['UPDATA_ISMAINWIN']),
-  },
+  methods: {},
 };
 </script>
 

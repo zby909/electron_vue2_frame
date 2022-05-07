@@ -26,11 +26,10 @@ export default {
     });
   },
   mounted() {
-    setTimeout(async () => {
+    setTimeout(() => {
       console.log('向父窗口传递信息');
-      const pid = await ipcRenderer.invoke('getParentWindowId', this.$thisBrowserId);
       ipcRenderer.send('windowIpc', 'imChildInfo', {
-        toBrowserWindowId: pid,
+        toBrowserWindowId: this.$parentWinId,
         data: { wy: 999 },
       });
     }, 3000);

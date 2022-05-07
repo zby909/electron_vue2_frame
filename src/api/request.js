@@ -1,15 +1,19 @@
+/* 已与后端约定 200的result必有值*/
 import axios from 'axios';
 import Qs from 'qs';
-const osUserInfo = require('os').userInfo();
-import { Message, Loading } from 'element-ui';
 import store from '../store';
+import { Message, Loading } from 'element-ui';
 import generateUUID from '@/utils/guid';
+import '@/api/insertGlobalVal'; //必须写入 不然无法获取更改的端口号
+
+const osUserInfo = require('os').userInfo();
 const IS_PROD_OR_TEST = ['production', 'test'].includes(process.env.VUE_APP_MODE);
 const IS_PROD = ['production'].includes(process.env.VUE_APP_MODE);
 
 let g_showMsg = []; //记录需要错误提示的接口
 let g_showLoadingApiNames = []; //记录需要loading提示的接口 (为了保证需要loading时间最长的那个接口完成后再close)
 let g_showLoadingStatus;
+
 function toLoading(msg = 'Loading...') {
   g_showLoadingStatus = Loading.service({ lock: true, text: msg, spinner: 'el-icon-loading', background: 'rgba(0, 0, 0, 0.6)' });
 }
@@ -20,7 +24,7 @@ function toInsertCommonParams(params) {
   params.window_id = store.state.app.windowId;
   params.uuid = generateUUID(); //这里的uuid只为了确定是哪一个接口 方便查日志
   params.user = osUserInfo.username;
-  params.project_id = '';
+  params.project_id = store.state.app.studyDesc.project || '';
   params.fver = store.state.app.appVersion;
   return params;
 }

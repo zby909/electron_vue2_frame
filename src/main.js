@@ -12,12 +12,9 @@ import i18n from './lang'; // internationalization
 import '@/plugins/element';
 import '@/plugins/vxe-table';
 // import echarts from '@/plugins/echarts';
-
 import '@/directive/directives';
 import '@/components/index';
-import apiModules from '@/api/index';
 
-Vue.prototype.$API = apiModules;
 // Vue.prototype.$Echarts = echarts;
 Vue.config.productionTip = false;
 
